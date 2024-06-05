@@ -1,18 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
-    // Start is called before the first frame update
-    void Start()
+    Player player;
+    public Player Player
     {
-        
+        get
+        {
+            if (player == null)
+                player = FindAnyObjectByType<Player>();
+            return player;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void OnInitialize()
     {
-        
+        player = FindAnyObjectByType<Player>();
     }
 }

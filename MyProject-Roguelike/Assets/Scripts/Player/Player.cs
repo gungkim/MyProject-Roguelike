@@ -8,12 +8,10 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     PlayerInput playerInputActions;
-
     Animator animator;
-
     private SpriteRenderer spriteRenderer;
-
     private Rigidbody2D rigid;
+    private BoxCollider2D boxCollider2D;
 
     bool isPlayerAlive = true;
 
@@ -21,9 +19,17 @@ public class Player : MonoBehaviour
 
     bool isMove = false;
 
+    bool isAlive = true;
+
     readonly int InputX_Hash = Animator.StringToHash("InputX");
     readonly int InputY_Hash = Animator.StringToHash("InputY");
     readonly int IsMove_Hash = Animator.StringToHash("IsMove");
+
+    private PlayerStat playerStat;
+
+    public PlayerStat PlayerStat { get { return playerStat; } }
+
+    float speed = 3.0f;
 
     private void Awake()
     {
@@ -34,35 +40,49 @@ public class Player : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         rigid = GetComponent<Rigidbody2D>();
+
+        playerStat = GetComponent<PlayerStat>();
     }
 
     private void Start()
     {
-        
+        //speed = playerStat.moveSpeed;
     }
 
     private void OnEnable()
     {
-        playerInputActions.Player.Enable();
-        playerInputActions.Player.Move.performed += OnMove;
-        playerInputActions.Player.Move.canceled += OnStop;
+        if (isPlayerAlive)
+        {
+            playerInputActions.Player.Enable();
+            playerInputActions.Player.Move.performed += OnMove;
+            playerInputActions.Player.Move.canceled += OnStop;
+        }
     }
 
     private void OnDisable()
     {
-        playerInputActions.Player.Move.performed -= OnMove;
-        playerInputActions.Player.Move.canceled -= OnStop;
-        playerInputActions.Player.Disable();
+        if (isPlayerAlive)
+        {
+             playerInputActions.Player.Move.canceled -= OnStop;
+            playerInputActions.Player.Move.performed -= OnMove;
+            playerInputActions.Player.Disable();
+        }
     }
-
-
 
     private void Update()
     {
-        
+        if (!isPlayerAlive)
+        {
+            DiscconnectInput();
+        }
     }
 
-    private void OnMove(UnityEngine.InputSystem.InputAction.CallbackContext context)
+    private void FixedUpdate()
+    {
+        rigid.MovePosition(rigid.position + Time.fixedDeltaTime * speed * inputDirection);
+    }
+
+    private void OnMove(InputAction.CallbackContext context)
     {
         inputDirection = context.ReadValue<Vector2>();
         animator.SetFloat(InputX_Hash, inputDirection.x);
@@ -73,6 +93,20 @@ public class Player : MonoBehaviour
 
     private void OnStop(InputAction.CallbackContext context)
     {
-        throw new NotImplementedException();
+        inputDirection = Vector2.zero;
+        isMove = false;
+        animator.SetBool(IsMove_Hash, isMove);
     }
+
+    /// <summary>
+    /// 플레이어가 죽었을 때 이동 불가하게 만들기
+    /// </summary>
+    private void DiscconnectInput()
+    {
+        playerInputActions.Player.Disable();
+    }
+
+
 }
+
+// playerStat에서 체력, 이동속도 가져오기
