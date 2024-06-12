@@ -5,25 +5,25 @@ using UnityEngine;
 
 // 아이템 한 종류의 정보를 저장하는 스크립터블 오브젝트
 [CreateAssetMenu(fileName = "New Item Data", menuName = "Scriptable Object/Item Weapon Data", order = 1)]
-public class ItemData_Weapon :  IWeapon
+public class ItemData_Weapon :  ItemData, IWeapon
 {
     public uint maxStackCount = 1;
 
     [Header("무기 기본 정보")]
-    public WeaponInfo Weaponinfo;
-    
+    public uint weaponDamage;
+    public float attackSpeed;
+    public float criticalHit;
+    public float attackDuration;
+    public Sprite icon;
+    public GameObject modelPrefab;
+
     public int GetWeaponDamage()
     {
-        return (int)Weaponinfo.weaponDamage;
+        return (int)weaponDamage;
     }
 
     public float GetAttackSpeed()
     {
-        return (float)Weaponinfo.attackSpeed;
-    }
-
-    public WeaponInfo GetWeaponInfo()
-    {
-        return Weaponinfo;
+        return (float)attackSpeed;
     }
 }

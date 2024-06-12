@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35e4ab7768f5df04b89090fb28198317, type: 3}
+  m_Name: Basic
+  m_EditorClassIdentifier: 
+  characterName: Basic
+  characterImage: {fileID: 21651367, guid: f0a03bfe37388764385e4393f4b9451a, type: 3}
+  character: {fileID: 433088725603980979, guid: 67eb7978c2183ba469054dc120d54815, type: 3}
+  attackPower: 5
+  moveSpeed: 5
+  criticalChance: 10
+  attackRange: 10
+  coolDown: 5
+  maxHP: 100
+  defense: 5
+  attackDuration: 1
+  attackSpeed: 1
+  expGain: 1

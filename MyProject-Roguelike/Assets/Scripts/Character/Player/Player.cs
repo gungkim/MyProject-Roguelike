@@ -24,12 +24,13 @@ public class Player : MonoBehaviour
     readonly int InputX_Hash = Animator.StringToHash("InputX");
     readonly int InputY_Hash = Animator.StringToHash("InputY");
     readonly int IsMove_Hash = Animator.StringToHash("IsMove");
-
+    readonly int DieHash = Animator.StringToHash("IsDie");
+    internal readonly Vector3 position;
     private PlayerStat playerStat;
 
     public PlayerStat PlayerStat { get { return playerStat; } }
 
-    float speed = 3.0f;
+    public CharacterData characterData;
 
     private void Awake()
     {
@@ -46,7 +47,9 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        //speed = playerStat.moveSpeed;
+        playerStat.Character = characterData;
+        playerStat.OnStatsChanged += OnStatsChanged;
+        Debug.Log($"{playerStat.MoveSpeed}");
     }
 
     private void OnEnable()
@@ -69,17 +72,10 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (!isPlayerAlive)
-        {
-            DiscconnectInput();
-        }
-    }
 
     private void FixedUpdate()
     {
-        rigid.MovePosition(rigid.position + Time.fixedDeltaTime * speed * inputDirection);
+        rigid.MovePosition(rigid.position + Time.fixedDeltaTime * playerStat.MoveSpeed * inputDirection);
     }
 
     private void OnMove(InputAction.CallbackContext context)
@@ -98,15 +94,35 @@ public class Player : MonoBehaviour
         animator.SetBool(IsMove_Hash, isMove);
     }
 
-    /// <summary>
-    /// 플레이어가 죽었을 때 이동 불가하게 만들기
-    /// </summary>
-    private void DiscconnectInput()
+    ///// <summary>
+    ///// 플레이어가 죽었을 때 이동 불가하게 만들기
+    ///// </summary>
+    //private void DiscconnectInput()
+    //{
+    //    playerInputActions.Player.Disable();
+    //}
+
+    private void OnStatsChanged()
     {
-        playerInputActions.Player.Disable();
+        // 필요한 작업 수행
+        Debug.Log("Stats updated.");
+        // 스탯 변경 시 수행할 추가 작업이 있다면 여기에 추가
+    }
+
+    private void PlayerDie()
+    {
+
+        if(PlayerStat.MaxHP <= 0)
+        {
+            isAlive = false;
+            animator.SetTrigger(DieHash);
+
+            playerInputActions.Player.Disable();
+        }
     }
 
 
 }
 
 // playerStat에서 체력, 이동속도 가져오기
+// 플레이어 hp가 0이 되었을 때 죽는 애니메이션 추가하기
