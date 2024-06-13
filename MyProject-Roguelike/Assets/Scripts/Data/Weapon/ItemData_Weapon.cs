@@ -14,8 +14,11 @@ public class ItemData_Weapon :  ItemData, IWeapon
     public float attackSpeed;
     public float criticalHit;
     public float attackDuration;
+    public float weaponCoolTime;
     public Sprite icon;
     public GameObject modelPrefab;
+
+    public uint AttackPower => weaponDamage;
 
     public int GetWeaponDamage()
     {
@@ -25,5 +28,10 @@ public class ItemData_Weapon :  ItemData, IWeapon
     public float GetAttackSpeed()
     {
         return (float)attackSpeed;
+    }
+
+    public float GetCriticalHit()
+    {
+        return (float)criticalHit;
     }
 }

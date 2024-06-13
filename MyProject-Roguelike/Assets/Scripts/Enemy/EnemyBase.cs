@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyBase : RecycleObject
+public class EnemyBase : RecycleObject, IAttack
 {
     [Header("적의 스탯")]
     private float enemyMaxHP;
     private float chaseSpeed;
     private float enemyDamage;
+    private int enemyDefense;
 
     new BoxCollider2D collider;
     Rigidbody2D rigid;
@@ -18,6 +19,7 @@ public class EnemyBase : RecycleObject
     public EnemyData enemyData;
 
     protected float currentHP;
+    public uint AttackPower => (uint)enemyDamage;
 
     protected virtual void Awake()
     {
@@ -30,6 +32,7 @@ public class EnemyBase : RecycleObject
         chaseSpeed = enemyData.chaseSpeed;
         enemyMaxHP = enemyData.enemyMaxHP;
         enemyDamage = enemyData.enemyDamage;
+        enemyDefense = enemyData.enemyDefense;
         currentHP = enemyMaxHP;
     }
 
@@ -43,6 +46,16 @@ public class EnemyBase : RecycleObject
         if (collision.CompareTag("Player"))
         {
             Attack();
+        }
+        if (collision.CompareTag("Weapon"))
+        {
+            // 무기와 접촉했을 때 피해 계산
+            WeaponBase weapon = collision.GetComponent<WeaponBase>();
+            if (weapon != null)
+            {
+                int damageDealt = CalculateDamage(weapon.AttackPower);
+                Damaged(damageDealt);
+            }
         }
     }
 
@@ -64,11 +77,31 @@ public class EnemyBase : RecycleObject
         }
     }
 
+    protected virtual void Damaged(int damage)
+    {
+        // 방어력을 고려하여 실제 피해 계산
+        int finalDamage = Mathf.Max(damage - (int)enemyDefense, 0);
+        Debug.Log($"{finalDamage}");
+        currentHP -= finalDamage;
+
+        if (currentHP <= 0)
+        {
+            Die();
+        }
+    }
+
     protected virtual void Die()
     {
-        if(currentHP <= 0)
-        {
-            Destroy(this);
-        }
+        // 적 사망 처리
+        Destroy(gameObject);
+        Debug.Log("적 처치");
+    }
+
+
+    protected virtual int CalculateDamage(uint weaponDamage)
+    {
+        // 무기의 공격력으로 피해 계산
+        int totalDamage = (int)weaponDamage;
+        return totalDamage;
     }
 }

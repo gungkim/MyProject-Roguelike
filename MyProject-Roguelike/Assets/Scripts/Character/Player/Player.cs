@@ -19,8 +19,6 @@ public class Player : MonoBehaviour
 
     bool isMove = false;
 
-    bool isAlive = true;
-
     readonly int InputX_Hash = Animator.StringToHash("InputX");
     readonly int InputY_Hash = Animator.StringToHash("InputY");
     readonly int IsMove_Hash = Animator.StringToHash("IsMove");
@@ -109,12 +107,12 @@ public class Player : MonoBehaviour
         // 스탯 변경 시 수행할 추가 작업이 있다면 여기에 추가
     }
 
-    private void PlayerDie()
+    public void PlayerDie()
     {
 
         if(PlayerStat.MaxHP <= 0)
         {
-            isAlive = false;
+            isPlayerAlive = false;
             animator.SetTrigger(DieHash);
 
             playerInputActions.Player.Disable();
@@ -125,4 +123,3 @@ public class Player : MonoBehaviour
 }
 
 // playerStat에서 체력, 이동속도 가져오기
-// 플레이어 hp가 0이 되었을 때 죽는 애니메이션 추가하기

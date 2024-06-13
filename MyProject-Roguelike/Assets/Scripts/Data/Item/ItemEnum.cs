@@ -7,25 +7,30 @@ public enum ItemCode
     Coin =0,
     CoinPocket,
 
-    ShortSword,
-    HolyWater,
+
+    HealPotion,
+
+
+
+    Bomb,
+
 
 
     SpeedShoes,
 
 
-    HealPotion,
-    
 
-    Bomb
+    ShortSword,
+    HolyWater,
+    FireBall,
 }
 public enum ItemType
 {
-    Weapon,
-    Accessory,
+    DropItem_Money,
     DropItem_Heal,
     DropItem_Active,
-    DropItem_Money
+    Accessory,
+    Weapon,
 }
 public enum ItemSortBy
 {

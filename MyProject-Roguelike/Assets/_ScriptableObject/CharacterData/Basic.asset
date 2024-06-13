@@ -15,11 +15,11 @@ MonoBehaviour:
   characterName: Basic
   characterImage: {fileID: 21651367, guid: f0a03bfe37388764385e4393f4b9451a, type: 3}
   character: {fileID: 433088725603980979, guid: 67eb7978c2183ba469054dc120d54815, type: 3}
-  attackPower: 5
-  moveSpeed: 5
+  playerAttackPower: 0
+  moveSpeed: 3
   criticalChance: 10
   attackRange: 10
-  coolDown: 5
+  coolDown: 10
   maxHP: 100
   defense: 5
   attackDuration: 1
