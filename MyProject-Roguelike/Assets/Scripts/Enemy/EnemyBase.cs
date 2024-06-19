@@ -61,7 +61,10 @@ public class EnemyBase : RecycleObject, IAttack
 
     protected virtual void Attack()
     {
-
+        player = GameManager.Instance.Player;
+        PlayerStat playerStat = player.PlayerStat;
+        float totalDamage = enemyDamage - playerStat.PlayerAttackPower;
+        // playerStat.currentHP -= totalDamage;
     }
 
     protected virtual void Chase()

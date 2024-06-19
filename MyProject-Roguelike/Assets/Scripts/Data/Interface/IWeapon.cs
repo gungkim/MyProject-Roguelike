@@ -5,7 +5,5 @@ using UnityEngine;
 public interface IWeapon : IAttack
 {
     int GetWeaponDamage();
-    float GetAttackSpeed();
-
     float GetCriticalHit();
 }

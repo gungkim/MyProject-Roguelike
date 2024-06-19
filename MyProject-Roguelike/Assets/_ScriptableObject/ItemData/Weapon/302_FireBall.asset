@@ -23,6 +23,6 @@ MonoBehaviour:
   attackSpeed: 2
   criticalHit: 10
   attackDuration: 5
-  weaponCoolTime: 5
+  weaponCoolTime: 10
   icon: {fileID: 21300000, guid: cc84946d1dec8c54287e533451bb8d22, type: 3}
   modelPrefab: {fileID: 36978694139811667, guid: 986e73b034aa0f94caecc7aa1a59c7fe, type: 3}

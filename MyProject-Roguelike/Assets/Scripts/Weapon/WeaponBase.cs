@@ -15,6 +15,7 @@ public class WeaponBase : RecycleObject, IWeapon
     protected float coolTime;
 
     protected bool isCriticalActive = false;
+    private Coroutine weaponActivateCoroutine;
 
     protected virtual void Awake()
     {
@@ -32,7 +33,10 @@ public class WeaponBase : RecycleObject, IWeapon
 
         CalculateCoolTime();
 
-        StartCoroutine(WeaponActivate());
+        if (weaponActivateCoroutine == null)
+        {
+            weaponActivateCoroutine = StartCoroutine(WeaponActivate());
+        }
     }
 
     protected IEnumerator WeaponActivate()
@@ -41,6 +45,7 @@ public class WeaponBase : RecycleObject, IWeapon
         {
             Fire();
             yield return new WaitForSeconds(coolTime);
+            Debug.Log("코루틴실행");
         }
     }
     
@@ -54,6 +59,7 @@ public class WeaponBase : RecycleObject, IWeapon
         if (collision.CompareTag("Enemy"))
         {
             Attack(collision);
+            Destroy(gameObject);
         }
     }
 
@@ -82,11 +88,13 @@ public class WeaponBase : RecycleObject, IWeapon
         return randomValue <= totalCritical;
     }
 
-    private void CalculateCoolTime()
+    protected virtual void CalculateCoolTime()
     {
         if (playerStat != null && itemData_Weapon != null)
         {
-            coolTime = itemData_Weapon.weaponCoolTime * (1 - (playerStat.coolTime / 100f));
+            // coolTime을 퍼센트 단위로 계산
+            float coolTimeReduction = playerStat.CoolTime / 100f;
+            coolTime = itemData_Weapon.weaponCoolTime * (1 - coolTimeReduction);
         }
         else if (itemData_Weapon != null)
         {
@@ -96,6 +104,7 @@ public class WeaponBase : RecycleObject, IWeapon
         {
             coolTime = 0; // 예외 처리: 무기 데이터가 없을 경우
         }
+        Debug.Log($"Calculated coolTime: {coolTime}");
     }
 
     public uint AttackPower
@@ -106,11 +115,6 @@ public class WeaponBase : RecycleObject, IWeapon
     public int GetWeaponDamage()
     {
         return (int)itemData_Weapon.weaponDamage;
-    }
-
-    public float GetAttackSpeed()
-    {
-        return itemData_Weapon.attackSpeed;
     }
 
     public float GetCriticalHit()

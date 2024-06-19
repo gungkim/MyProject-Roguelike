@@ -10,12 +10,13 @@ public class PlayerStat : MonoBehaviour, IAttack
     private int playerAttackPower;
     private int defense;
     private float maxHP;
+    private float currentHP;
     private float criticalChance;
     private float attackRange;
     private float attackSpeed;
     private float moveSpeed;
-    public float coolTime;
-    public int expGain;
+    private float coolTime;
+    private int expGain;
 
     private ItemData_Accessory itemData_Accessory;
     private CharacterData characterData;
@@ -39,8 +40,49 @@ public class PlayerStat : MonoBehaviour, IAttack
         set
         {
             characterData = value;
-            RecalculateStats();
+            if (characterData != null)
+            {
+                CalculateStats();
+            }
+            else
+            {
+                Debug.LogError("CharacterData is null when assigned to PlayerStat!");
+            }
         }
+    }
+
+    public void Start()
+    {
+        currentHP = maxHP;
+        if (characterData != null)
+        {
+            CalculateStats();
+        }
+        else
+        {
+            Debug.LogError("CharacterData is not assigned at Start!");
+        }
+    }
+
+    private void CalculateStats()
+    {
+        if (characterData == null)
+        {
+            Debug.LogError("CharacterData is not assigned!");
+            return;
+        }
+
+        playerAttackPower = characterData.playerAttackPower;
+        defense = characterData.defense;
+        maxHP = characterData.maxHP;
+        criticalChance = characterData.criticalChance;
+        attackRange = characterData.attackRange;
+        attackSpeed = characterData.attackSpeed;
+        moveSpeed = characterData.moveSpeed;
+        coolTime = characterData.coolDown;
+        expGain = characterData.expGain;
+
+        OnStatsChanged?.Invoke();
     }
 
     private void RecalculateStats()
@@ -89,6 +131,8 @@ public class PlayerStat : MonoBehaviour, IAttack
 
     public float AttackSpeed { get { return attackSpeed; }  set { attackSpeed = value; } }
 
+    public int ExpGain { get { return expGain; }  set { expGain = value; } }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         IAttack attack = collision.GetComponent<IAttack>();
@@ -99,10 +143,9 @@ public class PlayerStat : MonoBehaviour, IAttack
     private void Damaged(float damage)
     {
         float finalDamage = damage * ((100 - defense) * 0.01f);
-        maxHP -= finalDamage;
-        if (maxHP <= 0)
+        currentHP -= finalDamage;
+        if (currentHP <= 0)
         {
-            maxHP = 0;
             // 플레이어가 사망했음을 알리는 로직 추가
             Player player = GameManager.Instance.Player;
             player.PlayerDie();

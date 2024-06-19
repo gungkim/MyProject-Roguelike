@@ -17,6 +17,8 @@ public class Player : MonoBehaviour
 
     Vector2 inputDirection = Vector2.zero;
 
+    public Vector2 InputDirection => inputDirection;
+
     bool isMove = false;
 
     readonly int InputX_Hash = Animator.StringToHash("InputX");

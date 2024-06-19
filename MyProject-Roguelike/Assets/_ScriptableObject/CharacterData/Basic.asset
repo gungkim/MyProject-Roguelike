@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterName: Basic
   characterImage: {fileID: 21651367, guid: f0a03bfe37388764385e4393f4b9451a, type: 3}
-  character: {fileID: 433088725603980979, guid: 67eb7978c2183ba469054dc120d54815, type: 3}
-  playerAttackPower: 0
-  moveSpeed: 3
+  character: {fileID: 3851745383416174471, guid: 29ebab39eb81ad44588bdcc68a48eb93, type: 3}
+  playerAttackPower: 10
+  moveSpeed: 5
   criticalChance: 10
   attackRange: 10
   coolDown: 10

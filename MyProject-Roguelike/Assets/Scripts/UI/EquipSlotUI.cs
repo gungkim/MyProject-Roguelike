@@ -5,9 +5,11 @@ using UnityEngine.UI;
 
 public class EquipSlotUI : MonoBehaviour
 {
-    Image icon;
+    protected Image icon;
 
-    private void Awake()
+    protected EquipmentDataManager equipmentDataManager;
+
+    protected virtual void Awake()
     {
         icon = GetComponent<Image>();
     }
