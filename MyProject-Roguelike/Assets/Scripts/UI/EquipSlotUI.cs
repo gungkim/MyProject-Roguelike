@@ -7,7 +7,7 @@ public class EquipSlotUI : MonoBehaviour
 {
     protected Image icon;
 
-    protected EquipmentDataManager equipmentDataManager;
+    protected ItemDataManager equipmentDataManager;
 
     protected virtual void Awake()
     {

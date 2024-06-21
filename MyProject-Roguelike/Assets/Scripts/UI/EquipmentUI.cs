@@ -1,18 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EquipmentUI : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private Image icon;
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
     {
-        
+        icon = GetComponent<Image>();
     }
 }

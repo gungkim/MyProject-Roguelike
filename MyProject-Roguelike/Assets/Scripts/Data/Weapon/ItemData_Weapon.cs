@@ -17,6 +17,7 @@ public class ItemData_Weapon :  ItemData, IWeapon
     public float weaponCoolTime;
     public Sprite icon;
     public GameObject modelPrefab;
+    public int level = 1;
 
     public uint AttackPower => weaponDamage;
 

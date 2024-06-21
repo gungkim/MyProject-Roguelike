@@ -2,29 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Weapon_AutoTarget : WeaponBase
+public class Weapon_AutoTarget : Weapon_Projectile
 {
-    private bool canFire = true;
-    private float detectionRadius = 10f;
-
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-
-    protected override void Start()
-    {
-        base.Start();
-    }
+    private float detectionRadius = 100.0f;
 
     /// <summary>
     /// 무기의 발사 함수
     /// </summary>
-    protected override void Fire()
+    protected override void LaunchProjectile()
     {
-        if (!canFire)
-            return;
-
         Player player = GameManager.Instance.Player;
         if (player == null)
             return;
@@ -43,23 +29,8 @@ public class Weapon_AutoTarget : WeaponBase
                 projectileRb.velocity = direction * (itemData_Weapon.attackSpeed + playerStat.AttackSpeed);
             }
         }
-
-        StartCoroutine(CooldownRoutine());
     }
 
-    /// <summary>
-    /// 쿨타임동안 발사되지 않게끔 하는 코루틴
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator CooldownRoutine()
-    {
-        canFire = false;
-        Debug.Log($"Cooldown started. CoolTime: {coolTime}");
-
-        yield return new WaitForSeconds(coolTime);
-        canFire = true;
-        Debug.Log("Cooldown ended");
-    }
 
     /// <summary>
     /// 가장 가까운 적을 찾는 함수

@@ -16,6 +16,8 @@ public class WeaponBase : RecycleObject, IWeapon
 
     protected bool isCriticalActive = false;
 
+    protected bool isAttack = true;
+
     protected virtual void Awake()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
@@ -33,10 +35,14 @@ public class WeaponBase : RecycleObject, IWeapon
         CalculateCoolTime();
     }
 
-
+    /// <summary>
+    /// 무기가 작동하는 함수(쿨타임엔 작동안하게끔)
+    /// </summary>
     protected virtual void Fire()
     {
-
+        if (!isAttack)
+            return;
+        StartCoroutine(CooldownRoutine());
     }
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
@@ -63,6 +69,10 @@ public class WeaponBase : RecycleObject, IWeapon
         }
     }
 
+    /// <summary>
+    /// 아이템 데이터와 플레이어 스탯에 따라 크리티컬 확률을 합산하고 적용하는 함수
+    /// </summary>
+    /// <returns></returns>
     protected virtual bool CriticalHit()
     {
         float weaponCritical = GetCriticalHit();
@@ -72,6 +82,9 @@ public class WeaponBase : RecycleObject, IWeapon
         return randomValue <= totalCritical;
     }
 
+    /// <summary>
+    /// 아이템 데이터와 플레이어 스탯에 따라 쿨타임을 계산하는 함수
+    /// </summary>
     protected virtual void CalculateCoolTime()
     {
         if (playerStat != null && itemData_Weapon != null)
@@ -89,6 +102,14 @@ public class WeaponBase : RecycleObject, IWeapon
             coolTime = 0; // 예외 처리: 무기 데이터가 없을 경우
         }
         Debug.Log($"Calculated coolTime: {coolTime}");
+    }
+
+    protected IEnumerator CooldownRoutine()
+    {
+        isAttack = false;
+        CalculateCoolTime();
+        yield return new WaitForSeconds(coolTime);
+        isAttack = true;
     }
 
     public uint AttackPower

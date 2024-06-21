@@ -16,6 +16,8 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    ItemDataManager equipmentDataManager;
+
     protected override void OnInitialize()
     {
         player = FindAnyObjectByType<Player>();

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EquipmentDataManager : MonoBehaviour
+public class ItemDataManager : MonoBehaviour
 {
     public ItemData[] itemDatas;
 

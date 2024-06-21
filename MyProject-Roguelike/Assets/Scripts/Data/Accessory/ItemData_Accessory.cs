@@ -15,6 +15,7 @@ public class ItemData_Accessory : ItemData, IAttack
     public float attackRange;
     public float criticalChance;
     public int expGain;
+    public int level = 1;
 
     public uint AttackPower => (uint)damage;
 }
