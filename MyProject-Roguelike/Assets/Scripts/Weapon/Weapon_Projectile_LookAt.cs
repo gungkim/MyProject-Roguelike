@@ -8,15 +8,21 @@ public class Weapon_Projectile_LookAt : WeaponBase
 {
     new GameObject gameObject;
 
+    /// <summary>
+    /// 플레이어의 인풋 방향
+    /// </summary>
     private Vector2 lastInputDirection;
 
-        private bool canFire = true;
+    private bool canFire = true;
 
     protected override void Awake()
     {
         base.Awake();
     }
 
+    /// <summary>
+    /// 무기의 발사 함수
+    /// </summary>
     protected override void Fire()
     {
         if (!canFire)
@@ -30,7 +36,7 @@ public class Weapon_Projectile_LookAt : WeaponBase
         {
             lastInputDirection = direction; // 마지막 입력 방향 업데이트
 
-            GameObject weaponProjectile = Factory.Instance.CreateWeaponProjectile(itemData_Weapon.modelPrefab, transform.position);
+            GameObject weaponProjectile = Factory.Instance.CreateWeapon(itemData_Weapon.modelPrefab, transform.position);
             Rigidbody2D projectileRb = weaponProjectile.GetComponent<Rigidbody2D>();
 
             if (projectileRb != null)
@@ -42,6 +48,10 @@ public class Weapon_Projectile_LookAt : WeaponBase
         StartCoroutine(CooldownRoutine());
     }
 
+    /// <summary>
+    /// 쿨타임동안 발사되지 않게끔 하는 코루틴
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator CooldownRoutine()
     {
         canFire = false;

@@ -53,6 +53,8 @@ public class PlayerStat : MonoBehaviour, IAttack
 
     public void Start()
     {
+        Player player = GetComponent<Player>();
+        characterData = player.characterData;
         currentHP = maxHP;
         if (characterData != null)
         {
@@ -135,12 +137,19 @@ public class PlayerStat : MonoBehaviour, IAttack
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        IAttack attack = collision.GetComponent<IAttack>();
-        Damaged(attack.AttackPower);
+        if (collision.CompareTag("Enemy"))
+        {
+            IAttack attack = collision.GetComponent<IAttack>();
+            if (attack != null)
+            {
+                Damaged(attack.AttackPower);
+            }
+        }
     }
+
     public uint AttackPower { get; }
 
-    private void Damaged(float damage)
+    public void Damaged(float damage)
     {
         float finalDamage = damage * ((100 - defense) * 0.01f);
         currentHP -= finalDamage;

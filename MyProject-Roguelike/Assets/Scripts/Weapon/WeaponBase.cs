@@ -15,7 +15,6 @@ public class WeaponBase : RecycleObject, IWeapon
     protected float coolTime;
 
     protected bool isCriticalActive = false;
-    private Coroutine weaponActivateCoroutine;
 
     protected virtual void Awake()
     {
@@ -26,29 +25,15 @@ public class WeaponBase : RecycleObject, IWeapon
     {
         playerStat = FindObjectOfType<PlayerStat>();
 
-        if(playerStat != null)
+        if (playerStat != null)
         {
             playerStat.OnStatsChanged += CalculateCoolTime;
         }
 
         CalculateCoolTime();
-
-        if (weaponActivateCoroutine == null)
-        {
-            weaponActivateCoroutine = StartCoroutine(WeaponActivate());
-        }
     }
 
-    protected IEnumerator WeaponActivate()
-    {
-        while (true)
-        {
-            Fire();
-            yield return new WaitForSeconds(coolTime);
-            Debug.Log("코루틴실행");
-        }
-    }
-    
+
     protected virtual void Fire()
     {
 
@@ -62,7 +47,6 @@ public class WeaponBase : RecycleObject, IWeapon
             Destroy(gameObject);
         }
     }
-
 
     protected virtual void Attack(Collider2D collision)
     {

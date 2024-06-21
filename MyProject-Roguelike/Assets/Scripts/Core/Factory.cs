@@ -14,11 +14,12 @@ public class Factory : Singleton<Factory>
         if (flyingBatPool != null) flyingBatPool.Initialize();
     }
 
-    public GameObject CreateWeaponProjectile(GameObject prefab, Vector3 position)
+    public GameObject CreateWeapon
+        (GameObject prefab, Vector3 position)
     {
         Player player = GameManager.Instance.Player;
         GameObject projectile = Instantiate(prefab, player.position, Quaternion.identity);
-        // 필요 시 투사체에 추가 설정
+        
         return projectile;
     }
 }

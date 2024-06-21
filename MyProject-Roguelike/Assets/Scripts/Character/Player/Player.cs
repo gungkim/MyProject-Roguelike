@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     Animator animator;
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D rigid;
-    private BoxCollider2D boxCollider2D;
+    private BoxCollider2D weaponCollider2D;
 
     bool isPlayerAlive = true;
 
@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
     internal readonly Vector3 position;
     private PlayerStat playerStat;
 
+
     public PlayerStat PlayerStat { get { return playerStat; } }
 
     public CharacterData characterData;
@@ -43,6 +44,9 @@ public class Player : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
 
         playerStat = GetComponent<PlayerStat>();
+
+        Transform child = transform.GetChild(1);
+        weaponCollider2D = child.GetComponent<BoxCollider2D>();
     }
 
     private void Start()
@@ -102,6 +106,21 @@ public class Player : MonoBehaviour
     //    playerInputActions.Player.Disable();
     //}
 
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy"))
+        {
+            IAttack attack = collision.GetComponent<IAttack>();
+            if (attack != null)
+            {
+                playerStat.Damaged(attack.AttackPower);
+                
+            }
+        }
+    }
+
+
     private void OnStatsChanged()
     {
         // 필요한 작업 수행
@@ -109,6 +128,9 @@ public class Player : MonoBehaviour
         // 스탯 변경 시 수행할 추가 작업이 있다면 여기에 추가
     }
 
+    /// <summary>
+    /// 플레이어가 죽을 때의 함수
+    /// </summary>
     public void PlayerDie()
     {
 
@@ -121,7 +143,10 @@ public class Player : MonoBehaviour
         }
     }
 
-
+    public BoxCollider2D WeaponCollider
+    {
+        get { return weaponCollider2D; }
+    }
 }
 
 // playerStat에서 체력, 이동속도 가져오기
