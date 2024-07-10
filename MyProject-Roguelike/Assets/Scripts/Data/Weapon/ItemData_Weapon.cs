@@ -9,15 +9,17 @@ public class ItemData_Weapon :  ItemData, IWeapon
 {
     public uint maxStackCount = 1;
 
+    public string levelUpDescription;
+
     [Header("무기 기본 정보")]
     public uint weaponDamage;
     public float attackSpeed;
     public float criticalHit;
     public float attackDuration;
     public float weaponCoolTime;
-    public Sprite icon;
     public GameObject modelPrefab;
     public int level = 1;
+    public int maxLevel = 8;
 
     public uint AttackPower => weaponDamage;
 

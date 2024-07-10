@@ -53,7 +53,6 @@ public class Player : MonoBehaviour
     {
         playerStat.Character = characterData;
         playerStat.OnStatsChanged += OnStatsChanged;
-        Debug.Log($"{playerStat.MoveSpeed}");
     }
 
     private void OnEnable()
@@ -98,28 +97,6 @@ public class Player : MonoBehaviour
         animator.SetBool(IsMove_Hash, isMove);
     }
 
-    ///// <summary>
-    ///// 플레이어가 죽었을 때 이동 불가하게 만들기
-    ///// </summary>
-    //private void DiscconnectInput()
-    //{
-    //    playerInputActions.Player.Disable();
-    //}
-
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Enemy"))
-        {
-            IAttack attack = collision.GetComponent<IAttack>();
-            if (attack != null)
-            {
-                playerStat.Damaged(attack.AttackPower);
-                
-            }
-        }
-    }
-
 
     private void OnStatsChanged()
     {
@@ -133,14 +110,9 @@ public class Player : MonoBehaviour
     /// </summary>
     public void PlayerDie()
     {
-
-        if(PlayerStat.MaxHP <= 0)
-        {
-            isPlayerAlive = false;
-            animator.SetTrigger(DieHash);
-
-            playerInputActions.Player.Disable();
-        }
+        isPlayerAlive = false;
+        animator.SetTrigger(DieHash);
+        playerInputActions.Player.Disable();
     }
 
     public BoxCollider2D WeaponCollider

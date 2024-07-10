@@ -5,10 +5,23 @@ using UnityEngine;
 
 public class EnemycountUI : MonoBehaviour
 {
-    TextMeshProUGUI enemyCount;
+    TextMeshProUGUI enemyCountText;
+    private int enemyCount = 0;
+
 
     private void Awake()
     {
-        enemyCount = GetComponent<TextMeshProUGUI>();
+        enemyCountText = GetComponent<TextMeshProUGUI>();
+    }
+
+    public void CountingEnemy()
+    {
+        enemyCount++;
+        UpdateCounting();
+    }
+
+    private void UpdateCounting()
+    {
+        enemyCountText.text = $"{enemyCount}"; 
     }
 }

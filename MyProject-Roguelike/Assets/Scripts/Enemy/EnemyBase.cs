@@ -10,6 +10,7 @@ public class EnemyBase : RecycleObject, IAttack
     private float chaseSpeed;
     private float enemyDamage;
     private int enemyDefense;
+    private int exp;
 
     new BoxCollider2D collider;
     Rigidbody2D rigid;
@@ -17,6 +18,7 @@ public class EnemyBase : RecycleObject, IAttack
     Player player;
 
     public EnemyData enemyData;
+
 
     protected float currentHP;
     public uint AttackPower => (uint)enemyDamage;
@@ -67,7 +69,7 @@ public class EnemyBase : RecycleObject, IAttack
         // playerStat.currentHP -= totalDamage;
     }
 
-    protected virtual void Chase()
+    public virtual void Chase()
     {
         player = GameManager.Instance.Player;
 
@@ -98,6 +100,26 @@ public class EnemyBase : RecycleObject, IAttack
         // 적 사망 처리
         Destroy(gameObject);
         Debug.Log("적 처치");
+        EnemycountUI enemycountUI = FindObjectOfType<EnemycountUI>();
+        if(enemycountUI != null)
+        {
+            enemycountUI.CountingEnemy();
+        }
+
+        PlayerStat playerStat = FindObjectOfType<PlayerStat>();
+        if (playerStat != null)
+        {
+            int totalExp = enemyData.exp;
+
+            playerStat.GainExp(totalExp);
+        }
+    }
+
+    protected virtual void DropLoot()
+    {
+        // 아이템 드롭 처리
+        Debug.Log("엘리트 몹 아이템 드롭");
+        // 여기서 아이템 드롭 로직을 추가하세요.
     }
 
 

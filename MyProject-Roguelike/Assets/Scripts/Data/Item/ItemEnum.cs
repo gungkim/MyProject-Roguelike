@@ -23,6 +23,7 @@ public enum ItemCode
     ShortSword,
     HolyWater,
     FireBall,
+    IceShot,
 }
 public enum ItemType
 {

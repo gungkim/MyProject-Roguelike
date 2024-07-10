@@ -15,6 +15,6 @@ MonoBehaviour:
   code: 2
   type: 1
   itemName: "\uD790\uB9C1 \uD3EC\uC158"
-  itemDescription: "\uBA39\uC73C\uBA74 \uD53C\uAC00 \uD68C\uBCF5\uB41C\uB2E4."
-  itemIcon: {fileID: 0}
+  itemDescription: "\uBA39\uC73C\uBA74 HP\uAC00 \uD68C\uBCF5\uB41C\uB2E4."
+  itemIcon: {fileID: 20708534, guid: 269c196c7f264214cb1bb1e3c40b82af, type: 3}
   maxStackCount: 1

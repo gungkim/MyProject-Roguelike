@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public class PlayerStat : MonoBehaviour, IAttack
 {
@@ -19,10 +20,23 @@ public class PlayerStat : MonoBehaviour, IAttack
     private int expGain;
 
     private ItemData_Accessory itemData_Accessory;
+
+    private List<ItemData_Accessory> accessories = new List<ItemData_Accessory>();
+    private List<ItemData_Weapon> weapons = new List<ItemData_Weapon>();
+
     private CharacterData characterData;
+
+    private ExpBarUI expBarUI;
 
     // 이벤트 정의
     public event Action OnStatsChanged;
+
+    public event Action OnLevelUp;
+
+    public int Level { get; private set; } = 1;
+    public int CurrentEXP { get; private set; } = 0;
+    public int XPToNextLevel { get; private set; } = 100;
+
 
     public ItemData_Accessory ItemData_Accessory
     {
@@ -55,39 +69,24 @@ public class PlayerStat : MonoBehaviour, IAttack
     {
         Player player = GetComponent<Player>();
         characterData = player.characterData;
-        currentHP = maxHP;
+        Level = 1;
+        CurrentEXP = 0;
+        XPToNextLevel = CalculateExpToNextLevel(Level);
         if (characterData != null)
         {
             CalculateStats();
+            currentHP = maxHP;
         }
         else
         {
             Debug.LogError("CharacterData is not assigned at Start!");
         }
+
+
+        Debug.Log($"currentHP : {currentHP}, totalEXP : {CurrentEXP}");
     }
 
     private void CalculateStats()
-    {
-        if (characterData == null)
-        {
-            Debug.LogError("CharacterData is not assigned!");
-            return;
-        }
-
-        playerAttackPower = characterData.playerAttackPower;
-        defense = characterData.defense;
-        maxHP = characterData.maxHP;
-        criticalChance = characterData.criticalChance;
-        attackRange = characterData.attackRange;
-        attackSpeed = characterData.attackSpeed;
-        moveSpeed = characterData.moveSpeed;
-        coolTime = characterData.coolDown;
-        expGain = characterData.expGain;
-
-        OnStatsChanged?.Invoke();
-    }
-
-    private void RecalculateStats()
     {
         if (characterData == null)
         {
@@ -122,8 +121,15 @@ public class PlayerStat : MonoBehaviour, IAttack
         OnStatsChanged?.Invoke();
     }
 
+    private void RecalculateStats()
+    {
+        // RecalculateStats 메서드는 필요시 구현
+    }
+
+
     public float MoveSpeed { get { return moveSpeed; } set { moveSpeed = value; } }
     public float MaxHP { get { return maxHP; } set { maxHP = value; } }
+    public float CurrentHP { get { return currentHP; } set { currentHP = value; } }
     public int PlayerAttackPower { get { return playerAttackPower; } set { playerAttackPower = value; } }
     public float AttackRange { get { return attackRange; } set { attackRange = value; } }
     public int Defense { get { return defense; } set { defense = value; } }
@@ -137,7 +143,7 @@ public class PlayerStat : MonoBehaviour, IAttack
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy"))
+         if (collision.CompareTag("Enemy"))
         {
             IAttack attack = collision.GetComponent<IAttack>();
             if (attack != null)
@@ -147,12 +153,51 @@ public class PlayerStat : MonoBehaviour, IAttack
         }
     }
 
+    public void GainExp(int baseExp)
+    {
+        int totalExp = baseExp;
+
+        foreach (var accessory in accessories)
+        {
+            totalExp += (int)(baseExp * accessory.expGain / 100f);
+        }
+
+        CurrentEXP += totalExp;
+        CheckLevelUp();
+        OnStatsChanged?.Invoke();
+        Debug.Log($"totalExp : {totalExp}");
+    }
+
+    private void CheckLevelUp()
+    {
+        while (CurrentEXP >= XPToNextLevel)
+        {
+            CurrentEXP -= XPToNextLevel;
+            Level++;
+            XPToNextLevel = CalculateExpToNextLevel(Level);
+            OnLevelUp?.Invoke();
+        }
+    }
+
+    /// <summary>
+    /// 레벨이 오를수록 다음 레벨을 위한 경험치 총량을 늘리는 함수
+    /// </summary>
+    /// <param name="level"></param>
+    /// <returns></returns>
+    private int CalculateExpToNextLevel(int level)
+    {
+        return 100 * level;
+    }
+
     public uint AttackPower { get; }
 
     public void Damaged(float damage)
     {
         float finalDamage = damage * ((100 - defense) * 0.01f);
+        
         currentHP -= finalDamage;
+        Debug.Log($"currentHP : {currentHP}");
+        OnStatsChanged?.Invoke();
         if (currentHP <= 0)
         {
             // 플레이어가 사망했음을 알리는 로직 추가
@@ -160,6 +205,52 @@ public class PlayerStat : MonoBehaviour, IAttack
             player.PlayerDie();
         }
     }
-}
 
-// UI생성 후 성장치 추가. 성장치에서도 스탯 합산하기
+    public void AddAccessory(ItemData_Accessory accessory)
+    {
+        accessories.Add(accessory);
+    }
+
+    public void AddWeapon(ItemData_Weapon weapon)
+    {
+        if (!weapons.Contains(weapon))
+        {
+            weapons.Add(weapon);
+            RecalculateStats();
+        }
+    }
+
+    public int GetAccessoryLevel(ItemData_Accessory accessory)
+    {
+        var item = accessories.Find(a => a == accessory);
+        return item != null ? item.level : 0;
+    }
+
+    public int GetWeaponLevel(ItemData_Weapon weapon)
+    {
+        var item = weapons.Find(w => w == weapon);
+        return item != null ? item.level : 0;
+    }
+
+    public void LevelUpAccessory(ItemData_Accessory accessory)
+    {
+        var item = accessories.Find(a => a == accessory);
+        if (item != null && item.level < item.maxLevel)
+        {
+            item.level++;
+            RecalculateStats();
+            Debug.Log($"{item.name} has been leveled up to level {item.level}.");
+        }
+    }
+
+    public void LevelUpWeapon(ItemData_Weapon weapon)
+    {
+        var item = weapons.Find(w => w == weapon);
+        if (item != null && item.level < item.maxLevel)
+        {
+            item.level++;
+            RecalculateStats();
+            Debug.Log($"{item.name} has been leveled up to level {item.level}.");
+        }
+    }
+}

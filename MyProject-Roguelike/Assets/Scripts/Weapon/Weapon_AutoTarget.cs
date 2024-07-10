@@ -4,11 +4,8 @@ using UnityEngine;
 
 public class Weapon_AutoTarget : Weapon_Projectile
 {
-    private float detectionRadius = 100.0f;
+    private float detectionRadius = 1000.0f;
 
-    /// <summary>
-    /// 무기의 발사 함수
-    /// </summary>
     protected override void LaunchProjectile()
     {
         Player player = GameManager.Instance.Player;
@@ -17,17 +14,19 @@ public class Weapon_AutoTarget : Weapon_Projectile
 
         Vector3 playerPosition = player.transform.position;
 
-        EnemyBase nearestEnemy = FindNearestEnemy(playerPosition);
+        EnemyBase nearestEnemy = FindingEnemy(playerPosition);
         if (nearestEnemy != null)
         {
+            Vector3 enemyDistance = nearestEnemy.transform.position - playerPosition;
+            Debug.Log($"{enemyDistance}");
             Vector2 direction = (nearestEnemy.transform.position - playerPosition).normalized;
-            GameObject weaponProjectile = Factory.Instance.CreateWeapon(itemData_Weapon.modelPrefab, playerPosition);
-            Rigidbody2D projectileRb = weaponProjectile.GetComponent<Rigidbody2D>();
-
-            if (projectileRb != null)
-            {
-                projectileRb.velocity = direction * (itemData_Weapon.attackSpeed + playerStat.AttackSpeed);
-            }
+            float weaponSpeed = itemData_Weapon.attackSpeed + playerStat.AttackSpeed;
+            rigidbody2d.velocity = direction * weaponSpeed;
+            Debug.Log($"weaponSpeed = {weaponSpeed}");
+        }
+        else if(nearestEnemy == null)
+        {
+            Debug.LogWarning("적을 찾을 수 없음!");
         }
     }
 
@@ -36,7 +35,7 @@ public class Weapon_AutoTarget : Weapon_Projectile
     /// 가장 가까운 적을 찾는 함수
     /// </summary>
     /// <returns></returns>
-    private EnemyBase FindNearestEnemy(Vector3 playerPosition)
+    private EnemyBase FindingEnemy(Vector3 playerPosition)
     {
         EnemyBase nearestEnemy = null;
         float nearestDistance = float.MaxValue;

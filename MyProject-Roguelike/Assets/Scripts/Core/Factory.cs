@@ -5,7 +5,8 @@ using UnityEngine;
 public class Factory : Singleton<Factory>
 {
     FlyingBatPool flyingBatPool;
-    ProjectilePool projectilePool;
+    FireBallPool fireBallPool;
+    IceShotPool iceShotPool;
 
     protected override void OnInitialize()
     {
@@ -14,8 +15,11 @@ public class Factory : Singleton<Factory>
         flyingBatPool = GetComponentInChildren<FlyingBatPool>();
         if (flyingBatPool != null) flyingBatPool.Initialize();
 
-        projectilePool = GetComponentInChildren<ProjectilePool>();
-        if (projectilePool != null) projectilePool.Initialize();
+        fireBallPool = GetComponentInChildren<FireBallPool>();
+        if (fireBallPool != null) fireBallPool.Initialize();
+
+        iceShotPool = GetComponentInChildren<IceShotPool>();
+        if (iceShotPool != null) iceShotPool.Initialize();
     }
 
     public GameObject CreateWeapon

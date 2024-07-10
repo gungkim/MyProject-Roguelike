@@ -7,6 +7,7 @@ TagManager:
   - Enemy
   - Weapon
   - Ground
+  - UI
   layers:
   - Default
   - TransparentFX
@@ -43,4 +44,19 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 1325263153
+    locked: 0
+  - name: Background
+    uniqueID: 3844045585
+    locked: 0
+  - name: Object
+    uniqueID: 587875415
+    locked: 0
+  - name: Enemy
+    uniqueID: 1209412713
+    locked: 0
+  - name: Player
+    uniqueID: 1511659029
     locked: 0

@@ -17,6 +17,7 @@ public class EnemyData : ScriptableObject, IAttack
     public int enemyDamage;
     public int enemyMaxHP;
     public int enemyDefense;
+    public int exp;
 
     public uint AttackPower => (uint)enemyDamage;
 }

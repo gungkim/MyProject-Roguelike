@@ -21,3 +21,4 @@ MonoBehaviour:
   enemyDamage: 2
   enemyMaxHP: 10
   enemyDefense: 0
+  exp: 10

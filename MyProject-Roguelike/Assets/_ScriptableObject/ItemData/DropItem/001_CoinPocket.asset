@@ -16,4 +16,4 @@ MonoBehaviour:
   type: 0
   itemName: "\uCF54\uC778\uC8FC\uBA38\uB2C8"
   itemDescription: "\uB3C8\uC774 \uC794\uB729 \uB4E4\uC5B4\uC788\uB294 \uC8FC\uBA38\uB2C8\uB2E4(100\uACE8\uB4DC)"
-  itemIcon: {fileID: 0}
+  itemIcon: {fileID: 21300000, guid: 269c196c7f264214cb1bb1e3c40b82af, type: 3}

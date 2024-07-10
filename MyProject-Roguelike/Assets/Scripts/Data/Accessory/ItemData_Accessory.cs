@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Item Data", menuName = "Scriptable Object/Item Data", order = 5)]
 public class ItemData_Accessory : ItemData, IAttack
 {
+    public string levelUpDescription;
+
     [Header("장신구 정보")]
     public float moveSpeed;
     public int damage;
@@ -16,6 +18,7 @@ public class ItemData_Accessory : ItemData, IAttack
     public float criticalChance;
     public int expGain;
     public int level = 1;
+    public int maxLevel = 5;
 
     public uint AttackPower => (uint)damage;
 }
